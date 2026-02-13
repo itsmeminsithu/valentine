@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Will you be my Valentine?</title>
+
+  <style>
+    :root{
+      --pink:#ff4d88;
+      --pink2:#ff7ea8;
+      --bg1:#ffd6e7;
+      --bg2:#fff3c7;
+      --card:rgba(255,255,255,0.85);
+      --text:#222;
+    }
+    *{ box-sizing:border-box; }
+
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      background:linear-gradient(135deg,var(--bg1),var(--bg2));
+      height:100vh;
+      overflow:hidden;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding:14px;
+      color:var(--text);
+    }
+
+    .card{
+      background:var(--card);
+      backdrop-filter:blur(12px);
+      border-radius:25px;
+      padding:clamp(16px,4vw,28px);
+      text-align:center;
+      width:min(92vw,420px);
+      max-height:95vh;
+      overflow:visible;
+      box-shadow:0 20px 40px rgba(0,0,0,.15);
+      border:1px solid rgba(255,255,255,.6);
+      position:relative;
+      z-index:1;
+    }
+
+    h1{
+      margin:0;
+      font-size:clamp(20px,6vw,32px);
+      letter-spacing:.2px;
+    }
+    .sub{
+      margin:8px 0 0;
+      color:#555;
+      font-size:clamp(13px,3.5vw,16px);
+      line-height:1.35;
+    }
+
+    /* CHARACTER */
+    .character{
+      position:relative;
+      width:clamp(150px,55vw,220px);
+      height:clamp(180px,62vw,255px);
+      margin:18px auto 10px;
+      transition:transform .5s ease;
+      transform-origin:center;
+    }
+    .head{
+      width:clamp(135px,48vw,190px);
+      height:clamp(135px,48vw,190px);
+      background:#ffe0bd;
+      border-radius:50%;
+      margin:auto;
+      position:relative;
+      border:clamp(4px,1.2vw,5px) solid #f3d0a8;
+      box-shadow:0 10px 22px rgba(0,0,0,.10);
+      overflow:hidden;
+    }
+    .hair{
+      position:absolute;
+      top:clamp(-14px,-3vw,-10px);
+      left:clamp(10px,4vw,18px);
+      right:clamp(10px,4vw,18px);
+      height:clamp(38px,12vw,56px);
+      background:#4a3728;
+      border-radius:999px 999px 0 0;
+      z-index:2;
+      overflow:hidden;
+    }
+    .hair::after{
+      content:"";
+      position:absolute;
+      inset:10px -10px -10px 10px;
+      background:#3d2b1f;
+      border-radius:999px;
+      transform:rotate(12deg);
+      opacity:.9;
+    }
+    .cheek{
+      width:clamp(16px,5.5vw,22px);
+      height:clamp(10px,3.3vw,14px);
+      background:#ff9ab7;
+      opacity:.45;
+      border-radius:999px;
+      position:absolute;
+      top:clamp(78px,27vw,108px);
+      z-index:1;
+    }
+    .cheek.left{ left:clamp(16px,5vw,26px); }
+    .cheek.right{ right:clamp(16px,5vw,26px); }
+
+    .eye{
+      width:clamp(14px,4.6vw,18px);
+      height:clamp(22px,7vw,28px);
+      background:#333;
+      border-radius:999px;
+      position:absolute;
+      top:clamp(46px,16vw,66px);
+      z-index:3;
+    }
+    .eye.left{ left:clamp(40px,14vw,52px); }
+    .eye.right{ right:clamp(40px,14vw,52px); }
+    .eye::after{
+      content:"";
+      position:absolute;
+      width:clamp(5px,1.8vw,7px);
+      height:clamp(7px,2.3vw,9px);
+      background:white;
+      border-radius:999px;
+      top:clamp(4px,1.2vw,6px);
+      left:clamp(4px,1.2vw,6px);
+      opacity:.95;
+    }
+
+    .brow{
+      position:absolute;
+      width:clamp(24px,8vw,34px);
+      height:clamp(3px,1vw,4px);
+      background:#555;
+      top:clamp(36px,12.5vw,52px);
+      border-radius:999px;
+      z-index:3;
+      opacity:.9;
+    }
+    .brow.left{ left:clamp(30px,11vw,44px); transform:rotate(-15deg); }
+    .brow.right{ right:clamp(30px,11vw,44px); transform:rotate(15deg); }
+
+    .mouth{
+      position:absolute;
+      width:clamp(22px,7vw,32px);
+      height:clamp(10px,3.2vw,14px);
+      border-top:clamp(2px,.8vw,3px) solid #444;
+      border-radius:999px;
+      left:50%;
+      transform:translateX(-50%);
+      top:clamp(72px,25vw,106px);
+      z-index:3;
+      transition:.25s ease;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:clamp(20px,7vw,38px);
+      line-height:1;
+    }
+
+    .bowtie{
+      width:clamp(34px,12vw,44px);
+      height:clamp(18px,6vw,22px);
+      background:red;
+      position:absolute;
+      bottom:clamp(-14px,-4vw,-10px);
+      left:50%;
+      transform:translateX(-50%);
+      clip-path:polygon(0% 50%, 30% 0%, 50% 50%, 70% 0%, 100% 50%, 70% 100%, 50% 50%, 30% 100%);
+      z-index:5;
+      filter:drop-shadow(0 6px 10px rgba(0,0,0,.15));
+    }
+
+    .items{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      position:absolute;
+      left:0;
+      right:0;
+      bottom:clamp(-40px,-10vw,-28px);
+      font-size:clamp(38px,12vw,54px);
+      padding:0 clamp(4px,2vw,10px);
+      animation:float 3s infinite ease-in-out;
+      pointer-events:none;
+    }
+    @keyframes float{
+      0%,100%{ transform:translateY(0) }
+      50%{ transform:translateY(-8px) }
+    }
+
+    .buttons{
+      margin-top:14px;
+      display:flex;
+      justify-content:center;
+      gap:14px;
+      flex-wrap:wrap;
+    }
+    button{
+      padding:clamp(10px,3vw,14px) clamp(16px,4vw,22px);
+      border:none;
+      border-radius:16px;
+      font-size:clamp(14px,4vw,18px);
+      cursor:pointer;
+      transition:all .2s ease;
+      touch-action:manipulation;
+      user-select:none;
+      box-shadow:0 12px 22px rgba(0,0,0,.12);
+    }
+    button:active{ transform:scale(.98); }
+
+    #yes{
+      background:linear-gradient(135deg,var(--pink),var(--pink2));
+      color:white;
+      font-weight:800;
+      transform:scale(1.16);
+    }
+    #yes:hover{ filter:brightness(1.03); transform:scale(1.23); }
+
+    #no{
+      background:white;
+      border:2px solid rgba(0,0,0,.12);
+      font-weight:750;
+      /* FORCE VISIBILITY - NEVER HIDE */
+      opacity:1 !important;
+      visibility:visible !important;
+      display:inline-block !important;
+      pointer-events:auto !important;
+    }
+
+    /* Running animation for NO button */
+    .no-running{
+      transition: all 0.15s ease-out !important;
+    }
+
+    .tip{
+      margin:10px 0 0;
+      font-size:12px;
+      color:#666;
+      opacity:.85;
+    }
+
+    .idle{ animation:bob 2.1s ease-in-out infinite; }
+    @keyframes bob{
+      0%,100%{ transform:translateY(0) }
+      50%{ transform:translateY(-8px) }
+    }
+
+    .kiss{ animation:kiss 0.8s forwards ease-in-out; }
+    @keyframes kiss{
+      0%   { transform:scale(1) translateY(0); }
+      40%  { transform:scale(1.35) translateY(-18px); }
+      100% { transform:scale(2.5) translateY(-110px); }
+    }
+
+    .heart{
+      position:fixed;
+      font-size:clamp(18px,6vw,28px);
+      animation:rise 2s linear forwards;
+      pointer-events:none;
+      z-index:9999;
+      will-change:transform, opacity;
+    }
+    @keyframes rise{
+      from{ transform:translateY(0); opacity:1; }
+      to{ transform:translateY(-320px); opacity:0; }
+    }
+
+    /* Happy face */
+    .happy .brow{ opacity:.55; transform:none; }
+    .happy .brow.left{ transform:translateY(-2px) rotate(0deg); }
+    .happy .brow.right{ transform:translateY(-2px) rotate(0deg); }
+    .happy .eye{
+      background:transparent;
+      width:clamp(20px,7vw,26px);
+      height:clamp(20px,7vw,26px);
+      border-radius:999px;
+      border-bottom:clamp(3px,1vw,4px) solid #333;
+    }
+    .happy .eye::after{ display:none; }
+    .happy .mouth{
+      width:clamp(36px,12vw,52px);
+      height:clamp(18px,6vw,26px);
+      border-top:none;
+      border-bottom:clamp(4px,1.2vw,5px) solid #ff4d88;
+      border-radius:0 0 999px 999px;
+      top:clamp(78px,27vw,112px);
+      font-size:0;
+    }
+
+    /* Kissing face */
+    .kissing .eye{
+      background:transparent;
+      width:auto;
+      height:auto;
+      top:clamp(40px,14vw,58px);
+    }
+    .kissing .eye.left::before,
+    .kissing .eye.right::before{
+      content:"❤️";
+      font-size:clamp(26px,10vw,42px);
+      display:block;
+      line-height:1;
+      transform:translateY(-2px);
+    }
+    .kissing .eye::after{ display:none; }
+    .kissing .brow{ display:none; }
+    .kissing .mouth{
+      border:none;
+      font-size:clamp(26px,10vw,46px);
+      top:clamp(70px,24vw,104px);
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      .idle, .items, .heart{ animation:none !important; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <h1 id="title">Will you be my Valentine? 💘</h1>
+    <p class="sub" id="sub">I brought flowers and chocolate… please 🥺</p>
+
+    <div class="character idle" id="character">
+      <div class="head" id="head">
+        <div class="hair"></div>
+
+        <div class="brow left"></div>
+        <div class="brow right"></div>
+
+        <div class="eye left"></div>
+        <div class="eye right"></div>
+
+        <div class="cheek left"></div>
+        <div class="cheek right"></div>
+
+        <div class="mouth" id="mouth"></div>
+        <div class="bowtie"></div>
+      </div>
+
+      <div class="items" id="items">
+        <span>💐</span>
+        <span>🍫</span>
+      </div>
+    </div>
+
+    <div class="buttons">
+      <button id="no">No 😢</button>
+      <button id="yes">YES 💖</button>
+    </div>
+
+    <p class="tip">Tip: try clicking "No"… if you can 😏</p>
+  </div>
+
+  <script>
+    const noBtn = document.getElementById("no");
+    const yesBtn = document.getElementById("yes");
+    const titleEl = document.getElementById("title");
+    const subEl = document.getElementById("sub");
+    const character = document.getElementById("character");
+    const head = document.getElementById("head");
+    const mouth = document.getElementById("mouth");
+    const items = document.getElementById("items");
+
+    let locked = false;
+    let isRunning = false;
+    let runInterval = null;
+
+    // ==================== SOUND EFFECTS ====================
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+    function playWhoosh() {
+      try {
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+        oscillator.frequency.exponentialRampToValueAtTime(200, audioContext.currentTime + 0.1);
+        
+        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+        
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.1);
+      } catch(e) {}
+    }
+
+    function playKiss() {
+      try {
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        oscillator.type = 'sine';
+        oscillator.frequency.setValueAtTime(1200, audioContext.currentTime);
+        oscillator.frequency.exponentialRampToValueAtTime(800, audioContext.currentTime + 0.05);
+        
+        gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.15);
+        
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.15);
+      } catch(e) {}
+    }
+
+    function playCelebration() {
+      try {
+        const notes = [523.25, 659.25, 783.99, 1046.50];
+        
+        notes.forEach((freq, index) => {
+          setTimeout(() => {
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.type = 'sine';
+            oscillator.frequency.setValueAtTime(freq, audioContext.currentTime);
+            
+            gainNode.gain.setValueAtTime(0.15, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.5);
+          }, index * 80);
+        });
+      } catch(e) {}
+    }
+
+    function playSparkle() {
+      try {
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        oscillator.type = 'sine';
+        oscillator.frequency.setValueAtTime(2000, audioContext.currentTime);
+        oscillator.frequency.exponentialRampToValueAtTime(3000, audioContext.currentTime + 0.1);
+        
+        gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+        
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.2);
+      } catch(e) {}
+    }
+
+    // ==================== BUTTON MOVEMENT ====================
+    
+    function moveNo(){
+      // Get current button size
+      const btnRect = noBtn.getBoundingClientRect();
+      const btnWidth = btnRect.width;
+      const btnHeight = btnRect.height;
+      
+      // Safe padding from edges
+      const padding = 30;
+
+      // Calculate safe boundaries
+      const minX = padding;
+      const minY = padding;
+      const maxX = window.innerWidth - btnWidth - padding;
+      const maxY = window.innerHeight - btnHeight - padding;
+
+      // Make sure we have valid boundaries
+      if (maxX <= minX || maxY <= minY) {
+        console.log("Screen too small, keeping button in center");
+        return;
+      }
+
+      // Generate random position within safe boundaries
+      const x = minX + Math.floor(Math.random() * (maxX - minX));
+      const y = minY + Math.floor(Math.random() * (maxY - minY));
+
+      // Apply position
+      noBtn.style.position = "fixed";
+      noBtn.style.left = x + "px";
+      noBtn.style.top = y + "px";
+      noBtn.style.zIndex = "99999";
+      
+      // FORCE VISIBILITY
+      noBtn.style.opacity = "1";
+      noBtn.style.visibility = "visible";
+      noBtn.style.display = "inline-block";
+      noBtn.style.pointerEvents = "auto";
+      
+      // Play sound
+      playWhoosh();
+      
+      // Debug
+      console.log("Button moved to:", x, y, "Size:", btnWidth, btnHeight);
+    }
+
+    // Start running - keep moving the button
+    function startRunning(){
+      if (isRunning) return;
+      
+      isRunning = true;
+      noBtn.classList.add("no-running");
+      
+      // Move immediately
+      moveNo();
+      
+      // Then keep moving every 250ms
+      runInterval = setInterval(() => {
+        moveNo();
+      }, 250);
+    }
+
+    // Stop running
+    function stopRunning(){
+      isRunning = false;
+      noBtn.classList.remove("no-running");
+      
+      if (runInterval) {
+        clearInterval(runInterval);
+        runInterval = null;
+      }
+    }
+
+    // Event listeners for NO button - start running when trying to click
+    noBtn.addEventListener("pointerdown", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      startRunning();
+    });
+
+    noBtn.addEventListener("mousedown", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      startRunning();
+    });
+
+    noBtn.addEventListener("touchstart", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      startRunning();
+    }, { passive:false });
+
+    // Also start running on hover (desktop)
+    noBtn.addEventListener("mouseenter", () => {
+      startRunning();
+    });
+
+    // Stop running when mouse/touch leaves
+    noBtn.addEventListener("mouseleave", () => {
+      setTimeout(stopRunning, 800);
+    });
+
+    noBtn.addEventListener("pointerup", () => {
+      setTimeout(stopRunning, 800);
+    });
+
+    noBtn.addEventListener("touchend", () => {
+      setTimeout(stopRunning, 800);
+    });
+
+    // SAFETY: Check button visibility every 100ms
+    setInterval(() => {
+      // Force visibility
+      noBtn.style.opacity = "1";
+      noBtn.style.visibility = "visible";
+      noBtn.style.display = "inline-block";
+      noBtn.style.pointerEvents = "auto";
+      
+      // Check if button is in valid position
+      if (noBtn.style.position === "fixed") {
+        const rect = noBtn.getBoundingClientRect();
+        
+        // If button is out of bounds, move it back
+        if (rect.left < 0 || rect.top < 0 || 
+            rect.right > window.innerWidth || rect.bottom > window.innerHeight) {
+          console.log("Button out of bounds! Repositioning...");
+          moveNo();
+        }
+      }
+    }, 100);
+
+    // Hearts
+    function spawnHearts(count = 26){
+      const emojis = ["💖","💘","💕","❤️","🥰"];
+      for(let i=0;i<count;i++){
+        const h = document.createElement("div");
+        h.className = "heart";
+        h.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+        h.style.left = Math.random() * window.innerWidth + "px";
+        h.style.bottom = "-10px";
+        h.style.animationDuration = (1.6 + Math.random()*1.2) + "s";
+        document.body.appendChild(h);
+        setTimeout(() => h.remove(), 2600);
+      }
+      
+      playSparkle();
+    }
+
+    function setMoodSad(){
+      head.classList.remove("happy","kissing");
+      mouth.textContent = "";
+      items.style.opacity = "1";
+    }
+
+    function setMoodHappy(){
+      head.classList.remove("kissing");
+      head.classList.add("happy");
+      items.style.opacity = "1";
+    }
+
+    function setMoodKissing(){
+      head.classList.remove("happy");
+      head.classList.add("kissing");
+      mouth.textContent = "💋";
+      items.style.opacity = "0";
+    }
+
+    setMoodSad();
+
+    yesBtn.addEventListener("click", () => {
+      if (locked) return;
+      locked = true;
+
+      // Stop the button from running
+      stopRunning();
+
+      titleEl.textContent = "YAY!!! 💖";
+      subEl.textContent = "Happy Valentine's Day 🥰";
+
+      character.classList.remove("idle");
+      setMoodKissing();
+
+      character.classList.add("kiss");
+      
+      playCelebration();
+      setTimeout(() => playKiss(), 300);
+      
+      spawnHearts(32);
+      if (navigator.vibrate) navigator.vibrate([60, 40, 80]);
+
+      setTimeout(() => {
+        character.classList.remove("kiss");
+        character.classList.add("idle");
+        setMoodHappy();
+        spawnHearts(16);
+      }, 900);
+
+      // Move NO button one final time
+      setTimeout(() => {
+        moveNo();
+      }, 100);
+    });
+
+    // Keep NO inside screen after resize/rotate
+    window.addEventListener("resize", () => {
+      if (noBtn.style.position === "fixed") {
+        // Wait a bit for resize to complete
+        setTimeout(() => {
+          const rect = noBtn.getBoundingClientRect();
+          
+          // Check if button is out of bounds
+          if (rect.left < 0 || rect.top < 0 || 
+              rect.right > window.innerWidth || rect.bottom > window.innerHeight) {
+            moveNo();
+          }
+        }, 100);
+      }
+    });
+  </script>
+</body>
+</html>
