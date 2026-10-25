@@ -226,7 +226,7 @@
       background:white;
       border:2px solid rgba(0,0,0,.12);
       font-weight:750;
-      /* FORCE VISIBILITY - NEVER HIDE */
+      /* Keep visible */
       opacity:1 !important;
       visibility:visible !important;
       display:inline-block !important;
@@ -372,7 +372,7 @@
     let isRunning = false;
     let runInterval = null;
 
-    // ==================== SOUND EFFECTS ====================
+    // Sound effects
     const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
     function playWhoosh() {
@@ -459,7 +459,7 @@
       } catch(e) {}
     }
 
-    // ==================== BUTTON MOVEMENT ====================
+    // Button movement
     
     function moveNo(){
       // Get current button size
@@ -492,7 +492,7 @@
       noBtn.style.top = y + "px";
       noBtn.style.zIndex = "99999";
       
-      // FORCE VISIBILITY
+      // Keep visible
       noBtn.style.opacity = "1";
       noBtn.style.visibility = "visible";
       noBtn.style.display = "inline-block";
@@ -501,7 +501,6 @@
       // Play sound
       playWhoosh();
       
-      // Debug
       console.log("Button moved to:", x, y, "Size:", btnWidth, btnHeight);
     }
 
